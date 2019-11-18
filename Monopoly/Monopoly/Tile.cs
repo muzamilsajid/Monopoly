@@ -8,7 +8,8 @@ namespace Monopoly
 {
     class Tile
     {
-
+        #region Tile Properties
+        //***********************BEGIN PROPERTIES**********************
         Player owner;
 
         public Player Owner
@@ -51,8 +52,12 @@ namespace Monopoly
         {
             get { return purchased; }
         }
-        
+        //***********************END PROPERTIES**********************
+        #endregion
 
+
+        #region Functions
+        //***********************BEGIN FUNCTIONS**********************
         public void setID(int tileID)
         {
             id = tileID;
@@ -62,10 +67,17 @@ namespace Monopoly
         {
             purchased = true;
         }
-        
+
+        public void SetTileNotPurchased()
+        {
+            purchased = false;
+        }
+
         public void SetOwner(Player player)
         {
             owner = player;
         }
+        //***********************END FUNCTIONS**********************
+        #endregion
     }
 }

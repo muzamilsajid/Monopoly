@@ -14,6 +14,7 @@ namespace Monopoly
     {
         Tile myTile;
         Tile myCurrentTile;
+        Player CurrentPlayer;
         List<Tile> myListOfTiles = new List<Tile>();
         List<Player> myListOfPlayers = new List<Player>();
         int myCurrentPosition = 0;
@@ -59,89 +60,7 @@ namespace Monopoly
                 label1.Text = myCurrentPosition.ToString();
             }
 
-
-            listBox2.Items.Clear();
-                foreach (Tile myTiles in myListOfTiles)
-                {
-                    listBox2.Items.Add($"{myTiles.ID} - {myTiles.Purchased}");
-                }
-
             //MessageBox.Show(myCurrentTile.ID.ToString());
-        }
-
-        private void Tile2_DoubleClick(object sender, EventArgs e)
-        {
-            if(myCurrentTile.ID == 2)
-            {
-                if(myCurrentTile.Purchased == false)
-                {
-                    MessageBox.Show("Tile 1 Purchased");
-                    myCurrentTile.SetTilePurchased();
-                }
-                else
-                {
-                    MessageBox.Show("Tile Already Purchased");
-                }
-            }
-            else
-            {
-                MessageBox.Show("You have not landed on this tile");
-            }
-            listBox2.Items.Clear();
-            foreach (Tile myTiles in myListOfTiles)
-            {
-                listBox2.Items.Add(myTiles.Purchased);
-            }
-        }
-
-        private void Tile3_DoubleClick(object sender, EventArgs e)
-        {
-            if (myCurrentTile.ID == 3)
-            {
-                if (myCurrentTile.Purchased == false)
-                {
-                    MessageBox.Show("Tile 3 Purchased");
-                    myCurrentTile.SetTilePurchased();
-                }
-                else
-                {
-                    MessageBox.Show("Tile Already Purchased");
-                }
-            }
-            else
-            {
-                MessageBox.Show("You have not landed on this tile");
-            }
-            listBox2.Items.Clear();
-            foreach (Tile myTiles in myListOfTiles)
-            {
-                listBox2.Items.Add(myTiles.Purchased);
-            }
-        }
-
-        private void Tile1_DoubleClick(object sender, EventArgs e)
-        {
-            if (myCurrentTile.ID == 1)
-            {
-                if (myCurrentTile.Purchased == false)
-                {
-                    MessageBox.Show("Tile 1 Purchased");
-                    myCurrentTile.SetTilePurchased();
-                }
-                else
-                {
-                    MessageBox.Show("Tile Already Purchased");
-                }
-            }
-            else
-            {
-                MessageBox.Show("You have not landed on this tile");
-            }
-            listBox2.Items.Clear();
-            foreach (Tile myTiles in myListOfTiles)
-            {
-                listBox2.Items.Add(myTiles.Purchased);
-            }
         }
 
         private void btnCreatePlayer_Click(object sender, EventArgs e)
@@ -151,6 +70,8 @@ namespace Monopoly
             Player.CreatePlayer(txtFirstName.Text, txtLastName.Text);
 
             myListOfPlayers.Add(Player);
+
+            AddPlayersToListBox();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -162,78 +83,79 @@ namespace Monopoly
                 myListOfTiles.Add(myTile);
             }
 
-            foreach (Tile myTiles in myListOfTiles)
-            {
-                listBox1.Items.Add(myTiles.ID);
-                listBox2.Items.Add(myTiles.Purchased);
-            }
-
             myCurrentTile = myTile;
         }
 
-        private void Tile4_Click(object sender, EventArgs e)
+        private void BtnPurchase_Click(object sender, EventArgs e)
         {
-
+            PurchaseTile();
+            AddToListBoxOfAlltilesPurchased();
         }
 
-        private void Tile4_DoubleClick(object sender, EventArgs e)
+        void AddPlayersToListBox()
         {
-            if (myCurrentTile.ID == 4)
+            listBoxPlayers.Items.Clear();
+            foreach (Player players in myListOfPlayers)
             {
+                listBoxPlayers.Items.Add($"{players.FirstName} {players.LastName}");
+            }
+        }
+
+        public void PurchaseTile()
+        {
+            
                 if (myCurrentTile.Purchased == false)
                 {
-                    MessageBox.Show("Tile 3 Purchased");
                     myCurrentTile.SetTilePurchased();
-                }
+                    myCurrentTile.SetOwner(CurrentPlayer);
+                    CurrentPlayer.TilesOwned.Add(myCurrentTile);
+                    MessageBox.Show($"{myCurrentTile.ID} Purchased by {CurrentPlayer.FirstName} {CurrentPlayer.LastName}");
+            }
                 else
                 {
                     MessageBox.Show("Tile Already Purchased");
                 }
-            }
-            else
-            {
-                MessageBox.Show("You have not landed on this tile");
-            }
-            listBox2.Items.Clear();
-            foreach (Tile myTiles in myListOfTiles)
-            {
-                listBox2.Items.Add(myTiles.Purchased);
-            }
+
+            AddToListBoxOfTilesOwned();
+            
         }
 
-        private void Tile5_DoubleClick(object sender, EventArgs e)
+        void AddToListBoxOfAlltilesPurchased()
         {
-            if (myCurrentTile.ID == 5)
+            listBoxTilesPurchased.Items.Clear();
+
+            foreach (Tile tilesinlist in myListOfTiles)
             {
-                if (myCurrentTile.Purchased == false)
+                if (tilesinlist.Purchased)
                 {
-                    MessageBox.Show("Tile 4 Purchased");
-                    myCurrentTile.SetTilePurchased();
-                }
-                else
-                {
-                    MessageBox.Show("Tile Already Purchased");
+                    listBoxTilesPurchased.Items.Add($"{tilesinlist.Owner.FirstName} {tilesinlist.Owner.LastName}");
+                    listBoxTilesPurchased.Items.Add(tilesinlist.ID);
                 }
             }
-            else
+        }
+
+        void AddToListBoxOfTilesOwned()
+        {
+
+            listBoxTilesOwned.Items.Clear();
+
+            foreach (Tile tiles in CurrentPlayer.TilesOwned)
             {
-                MessageBox.Show("You have not landed on this tile");
-            }
-            listBox2.Items.Clear();
-            foreach (Tile myTiles in myListOfTiles)
-            {
-                listBox2.Items.Add(myTiles.Purchased);
+                listBoxTilesOwned.Items.Add(tiles.ID);
             }
         }
 
-        private void Tile1_Click(object sender, EventArgs e)
+        private void ListBoxPlayers_SelectedIndexChanged(object sender, EventArgs e)
         {
+            foreach (Player players in myListOfPlayers)
+            {
+                if(players.FirstName + " " + players.LastName == listBoxPlayers.Text)
+                {
+                    CurrentPlayer = players;
+                }
+            }
 
-        }
-
-        private void Tile2_Click(object sender, EventArgs e)
-        {
-
+            AddToListBoxOfTilesOwned();
         }
     }
 }

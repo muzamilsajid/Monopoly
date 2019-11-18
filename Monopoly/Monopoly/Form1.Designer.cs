@@ -43,8 +43,15 @@
             this.txtFirstName = new System.Windows.Forms.TextBox();
             this.txtLastName = new System.Windows.Forms.TextBox();
             this.btnCreatePlayer = new System.Windows.Forms.Button();
-            this.listBox1 = new System.Windows.Forms.ListBox();
-            this.listBox2 = new System.Windows.Forms.ListBox();
+            this.listBoxPlayers = new System.Windows.Forms.ListBox();
+            this.btnPurchase = new System.Windows.Forms.Button();
+            this.listBoxTilesOwned = new System.Windows.Forms.ListBox();
+            this.listBoxTilesPurchased = new System.Windows.Forms.ListBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // Tile0
@@ -64,8 +71,6 @@
             this.Tile1.Size = new System.Drawing.Size(85, 57);
             this.Tile1.TabIndex = 1;
             this.Tile1.Text = "label2";
-            this.Tile1.Click += new System.EventHandler(this.Tile1_Click);
-            this.Tile1.DoubleClick += new System.EventHandler(this.Tile1_DoubleClick);
             // 
             // Tile2
             // 
@@ -75,8 +80,6 @@
             this.Tile2.Size = new System.Drawing.Size(85, 57);
             this.Tile2.TabIndex = 2;
             this.Tile2.Text = "label3";
-            this.Tile2.Click += new System.EventHandler(this.Tile2_Click);
-            this.Tile2.DoubleClick += new System.EventHandler(this.Tile2_DoubleClick);
             // 
             // Tile3
             // 
@@ -86,8 +89,6 @@
             this.Tile3.Size = new System.Drawing.Size(85, 57);
             this.Tile3.TabIndex = 3;
             this.Tile3.Text = "label4";
-            this.Tile3.Click += new System.EventHandler(this.Tile4_Click);
-            this.Tile3.DoubleClick += new System.EventHandler(this.Tile3_DoubleClick);
             // 
             // Tile4
             // 
@@ -97,7 +98,6 @@
             this.Tile4.Size = new System.Drawing.Size(85, 57);
             this.Tile4.TabIndex = 4;
             this.Tile4.Text = "label5";
-            this.Tile4.DoubleClick += new System.EventHandler(this.Tile4_DoubleClick);
             // 
             // Tile5
             // 
@@ -181,35 +181,106 @@
             // 
             this.btnCreatePlayer.Location = new System.Drawing.Point(449, 70);
             this.btnCreatePlayer.Name = "btnCreatePlayer";
-            this.btnCreatePlayer.Size = new System.Drawing.Size(75, 23);
+            this.btnCreatePlayer.Size = new System.Drawing.Size(100, 23);
             this.btnCreatePlayer.TabIndex = 14;
             this.btnCreatePlayer.Text = "Create Player";
             this.btnCreatePlayer.UseVisualStyleBackColor = true;
             this.btnCreatePlayer.Click += new System.EventHandler(this.btnCreatePlayer_Click);
             // 
-            // listBox1
+            // listBoxPlayers
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(449, 100);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(120, 199);
-            this.listBox1.TabIndex = 15;
+            this.listBoxPlayers.FormattingEnabled = true;
+            this.listBoxPlayers.Location = new System.Drawing.Point(449, 137);
+            this.listBoxPlayers.Name = "listBoxPlayers";
+            this.listBoxPlayers.Size = new System.Drawing.Size(120, 199);
+            this.listBoxPlayers.TabIndex = 15;
+            this.listBoxPlayers.SelectedIndexChanged += new System.EventHandler(this.ListBoxPlayers_SelectedIndexChanged);
             // 
-            // listBox2
+            // btnPurchase
             // 
-            this.listBox2.FormattingEnabled = true;
-            this.listBox2.Location = new System.Drawing.Point(575, 100);
-            this.listBox2.Name = "listBox2";
-            this.listBox2.Size = new System.Drawing.Size(120, 199);
-            this.listBox2.TabIndex = 16;
+            this.btnPurchase.Location = new System.Drawing.Point(53, 276);
+            this.btnPurchase.Name = "btnPurchase";
+            this.btnPurchase.Size = new System.Drawing.Size(75, 23);
+            this.btnPurchase.TabIndex = 16;
+            this.btnPurchase.Text = "Purchase";
+            this.btnPurchase.UseVisualStyleBackColor = true;
+            this.btnPurchase.Click += new System.EventHandler(this.BtnPurchase_Click);
+            // 
+            // listBoxTilesOwned
+            // 
+            this.listBoxTilesOwned.FormattingEnabled = true;
+            this.listBoxTilesOwned.Location = new System.Drawing.Point(575, 137);
+            this.listBoxTilesOwned.Name = "listBoxTilesOwned";
+            this.listBoxTilesOwned.Size = new System.Drawing.Size(120, 199);
+            this.listBoxTilesOwned.TabIndex = 17;
+            // 
+            // listBoxTilesPurchased
+            // 
+            this.listBoxTilesPurchased.FormattingEnabled = true;
+            this.listBoxTilesPurchased.Location = new System.Drawing.Point(701, 137);
+            this.listBoxTilesPurchased.Name = "listBoxTilesPurchased";
+            this.listBoxTilesPurchased.Size = new System.Drawing.Size(120, 199);
+            this.listBoxTilesPurchased.TabIndex = 18;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(446, 20);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(60, 13);
+            this.label2.TabIndex = 19;
+            this.label2.Text = "First Name:";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(552, 20);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(61, 13);
+            this.label3.TabIndex = 20;
+            this.label3.Text = "Last Name:";
+            // 
+            // label4
+            // 
+            this.label4.Location = new System.Drawing.Point(446, 108);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(123, 26);
+            this.label4.TabIndex = 21;
+            this.label4.Text = "List of Players";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label5
+            // 
+            this.label5.Location = new System.Drawing.Point(572, 108);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(123, 26);
+            this.label5.TabIndex = 22;
+            this.label5.Text = "List of Properties of Current Player";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label6
+            // 
+            this.label6.Location = new System.Drawing.Point(698, 108);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(123, 26);
+            this.label6.TabIndex = 23;
+            this.label6.Text = "List of All Properties Purchased";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(711, 317);
-            this.Controls.Add(this.listBox2);
-            this.Controls.Add(this.listBox1);
+            this.ClientSize = new System.Drawing.Size(888, 516);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.listBoxTilesPurchased);
+            this.Controls.Add(this.listBoxTilesOwned);
+            this.Controls.Add(this.btnPurchase);
+            this.Controls.Add(this.listBoxPlayers);
             this.Controls.Add(this.btnCreatePlayer);
             this.Controls.Add(this.txtLastName);
             this.Controls.Add(this.txtFirstName);
@@ -250,8 +321,15 @@
         private System.Windows.Forms.TextBox txtFirstName;
         private System.Windows.Forms.TextBox txtLastName;
         private System.Windows.Forms.Button btnCreatePlayer;
-        private System.Windows.Forms.ListBox listBox1;
-        private System.Windows.Forms.ListBox listBox2;
+        private System.Windows.Forms.ListBox listBoxPlayers;
+        private System.Windows.Forms.Button btnPurchase;
+        private System.Windows.Forms.ListBox listBoxTilesOwned;
+        private System.Windows.Forms.ListBox listBoxTilesPurchased;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
     }
 }
 

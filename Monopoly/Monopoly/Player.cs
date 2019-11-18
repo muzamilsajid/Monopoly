@@ -20,6 +20,8 @@ namespace Monopoly
             get { return lastname; }
         }
 
+        public List<Tile> TilesOwned = new List<Tile>();
+
         public void CreatePlayer(string fName, string lName)
         {
             firstname = fName;

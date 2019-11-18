@@ -7,3 +7,13 @@ c:\users\muzamil-pc\documents\visual studio 2015\Projects\Monopoly\Monopoly\obj\
 c:\users\muzamil-pc\documents\visual studio 2015\Projects\Monopoly\Monopoly\obj\Debug\Monopoly.csproj.GenerateResource.Cache
 c:\users\muzamil-pc\documents\visual studio 2015\Projects\Monopoly\Monopoly\obj\Debug\Monopoly.exe
 c:\users\muzamil-pc\documents\visual studio 2015\Projects\Monopoly\Monopoly\obj\Debug\Monopoly.pdb
+C:\Users\Lenovo-PC\source\repos\Monopoly\Monopoly\bin\Debug\Monopoly.exe.config
+C:\Users\Lenovo-PC\source\repos\Monopoly\Monopoly\bin\Debug\Monopoly.exe
+C:\Users\Lenovo-PC\source\repos\Monopoly\Monopoly\bin\Debug\Monopoly.pdb
+C:\Users\Lenovo-PC\source\repos\Monopoly\Monopoly\obj\Debug\Monopoly.csprojAssemblyReference.cache
+C:\Users\Lenovo-PC\source\repos\Monopoly\Monopoly\obj\Debug\Monopoly.Form1.resources
+C:\Users\Lenovo-PC\source\repos\Monopoly\Monopoly\obj\Debug\Monopoly.Properties.Resources.resources
+C:\Users\Lenovo-PC\source\repos\Monopoly\Monopoly\obj\Debug\Monopoly.csproj.GenerateResource.cache
+C:\Users\Lenovo-PC\source\repos\Monopoly\Monopoly\obj\Debug\Monopoly.csproj.CoreCompileInputs.cache
+C:\Users\Lenovo-PC\source\repos\Monopoly\Monopoly\obj\Debug\Monopoly.exe
+C:\Users\Lenovo-PC\source\repos\Monopoly\Monopoly\obj\Debug\Monopoly.pdb
