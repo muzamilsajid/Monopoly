@@ -8,6 +8,7 @@ namespace Monopoly
 {
     class Player
     {
+        
         string firstname;
         public string FirstName
         {

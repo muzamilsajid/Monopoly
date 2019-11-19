@@ -17,3 +17,4 @@ C:\Users\Lenovo-PC\source\repos\Monopoly\Monopoly\obj\Debug\Monopoly.csproj.Gene
 C:\Users\Lenovo-PC\source\repos\Monopoly\Monopoly\obj\Debug\Monopoly.csproj.CoreCompileInputs.cache
 C:\Users\Lenovo-PC\source\repos\Monopoly\Monopoly\obj\Debug\Monopoly.exe
 C:\Users\Lenovo-PC\source\repos\Monopoly\Monopoly\obj\Debug\Monopoly.pdb
+C:\Users\Muzamil-PC\documents\visual studio 2015\Projects\Monopoly\Monopoly\obj\Debug\Monopoly.frmBoard.resources
