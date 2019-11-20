@@ -12,6 +12,7 @@ namespace Monopoly
 {
     public partial class Form1 : Form
     {
+        #region Declarations
         Tile myTile;
         Tile myCurrentTile;
         Player CurrentPlayer;
@@ -31,6 +32,7 @@ namespace Monopoly
         Player Player;
 
         Random myRandom = new Random();
+        #endregion
 
 
         public Form1()
@@ -125,6 +127,12 @@ namespace Monopoly
                 myNo = myRandom.Next(100000, 200000000);
                 CreateNameLabels(i,listOfTileNames[i]);
                 CreateValueLabels(i,(int)RoundToNearest(myNo));
+            }
+
+            for (int i = 0; i < myListOfTiles.Count; i++)
+            {
+                myListOfTiles[i].SetName(listOfTileNames[i + 1]);
+                myListOfTiles[i].SetPurchaseValue((int)Convert.ToDouble(listOfValueLabels[i + 1].Text.ToString()));
             }
         }
 
@@ -310,7 +318,8 @@ namespace Monopoly
                 if (tilesinlist.Purchased)
                 {
                     listBoxTilesPurchased.Items.Add($"{tilesinlist.Owner.FirstName} {tilesinlist.Owner.LastName}");
-                    listBoxTilesPurchased.Items.Add(tilesinlist.ID);
+                    listBoxTilesPurchased.Items.Add(tilesinlist.Name);
+                    listBoxTilesPurchased.Items.Add($"Value: {tilesinlist.PurchaseValue.ToString("###,###,###")}");
                 }
             }
         }
@@ -324,7 +333,7 @@ namespace Monopoly
             {
                 foreach (Tile tiles in CurrentPlayer.TilesOwned)
                 {
-                    listBoxTilesOwned.Items.Add(tiles.ID);
+                    listBoxTilesOwned.Items.Add(tiles.Name);
                 }
             }
             catch

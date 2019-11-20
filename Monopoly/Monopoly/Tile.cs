@@ -77,6 +77,16 @@ namespace Monopoly
         {
             owner = player;
         }
+
+        public void SetName(string Name)
+        {
+            name = Name;
+        }
+
+        public void SetPurchaseValue(int value)
+        {
+            purchasevalue = value;
+        }
         //***********************END FUNCTIONS**********************
         #endregion
     }
