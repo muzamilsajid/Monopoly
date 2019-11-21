@@ -8,7 +8,7 @@ namespace Monopoly
 {
     class Player
     {
-        
+
         string firstname;
         public string FirstName
         {
@@ -21,7 +21,7 @@ namespace Monopoly
             get { return lastname; }
         }
 
-        int money;
+        int money = 0;
         public int Money
         {
             get { return money; }
@@ -40,6 +40,16 @@ namespace Monopoly
         {
             firstname = fName;
             lastname = lName;
+        }
+
+        public void AddMoney(int value)
+        {
+            money += value;
+        }
+
+        public void SubtractMoney(int value)
+        {
+            money -= value;
         }
     }
 }

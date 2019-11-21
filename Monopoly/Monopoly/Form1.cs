@@ -13,17 +13,34 @@ namespace Monopoly
     public partial class Form1 : Form
     {
         #region Declarations
+        //Declare myTile Variable to Hold a Card
         Tile myTile;
+        
+        // myCurrentTile Holds The Currently Active Tile
         Tile myCurrentTile;
+        
+        //CurrentPlayer holds the currently active player.
         Player CurrentPlayer;
+        
+        //List for holding all the tiles (Cards)
         List<Tile> myListOfTiles = new List<Tile>();
+
+        //List for holding All the players
         List<Player> myListOfPlayers = new List<Player>();
+
+
         int myCurrentPosition = 0;
 
+        //List for adding all Lables(Tiles/Cards) on Load
         List<Control> TileControls = new List<Control>();
+
+        //list for holding virtual labels created at runtime for Card/Tile Titles
         List<Label> listOfNameLabels = new List<Label>();
+
+        //list for holding virtual labels created at runtime for Card/Tile purchase Values
         List<Label> listOfValueLabels = new List<Label>();
 
+        //list for holding tile names assigned from listofNameLables
         List<string> listOfTileNames = new List<string>();
 
         Label nameLabel;
@@ -43,23 +60,25 @@ namespace Monopoly
        
         private void btnDice_Click(object sender, EventArgs e)
         {
-            btnDice.Text = new Random().Next(1, 7).ToString();
+            btnDice.Text = new Random().Next(1, 7).ToString();//Create A new random value for Dice.
 
 
-            if (myCurrentPosition + Convert.ToInt32(btnDice.Text) < 22)
+            if (myCurrentPosition + Convert.ToInt32(btnDice.Text) < 22)//Check if the Current position is < the total number of tiles on the board so we go back to the first tile.
             {
-                myCurrentPosition = myCurrentPosition + Convert.ToInt32(btnDice.Text);
-                foreach (Tile myTiles in myListOfTiles)
+                myCurrentPosition = myCurrentPosition + Convert.ToInt32(btnDice.Text);//myCurrentPostion increments by the number on the dice.
+                foreach (Tile myTiles in myListOfTiles)//iterate through all the tiles in myListOfTiles
                 {
-                    if (myCurrentPosition == myTiles.ID)
+                    if (myCurrentPosition == myTiles.ID)//if the myCurrentPostion matches the TILE ID we set the position of the current tile to that Tile
                     {
-                        myCurrentTile = myTiles;
+                        myCurrentTile = myTiles;//Set the position of the current tile to the position tile.
                     }
                 }
-                myCurrentTile.setID(myCurrentPosition);
-                label1.Text = myCurrentPosition.ToString();
+                //myCurrentTile.setID(myCurrentPosition);//Set the currentTile id to the current position
+                label1.Text = myCurrentPosition.ToString();//Label1 to 21 represnt the balck tiles on the board.
+                label8.Text = "Pos " + myCurrentPosition.ToString();
+                label9.Text = "ID " + myCurrentTile.ID.ToString();
             }
-            else
+            else //if myCurretnPosition >= 22 then set the current position to the lower numbers
             {
                 myCurrentPosition = myCurrentPosition - ((23 - Convert.ToInt16(btnDice.Text)) - 1);
                 foreach (Tile myTiles in myListOfTiles)
@@ -69,8 +88,10 @@ namespace Monopoly
                         myCurrentTile = myTiles;
                     }
                 }
-                myCurrentTile.setID(myCurrentPosition);
+                //myCurrentTile.setID(myCurrentPosition);
                 label1.Text = myCurrentPosition.ToString();
+                label8.Text = "Pos " + myCurrentPosition.ToString();
+                label9.Text = "ID " + myCurrentTile.ID.ToString();
             }
 
             //Change Color Of Each Tile Based On Current Tile Posistion
@@ -89,6 +110,11 @@ namespace Monopoly
                     myTiles.BackColor = Color.Black;
                 }
             }
+
+            if(myCurrentTile.Name =="Community Chest")
+            {
+                MessageBox.Show("Landed On Community Chest");
+            }
         }
 
         private void btnCreatePlayer_Click(object sender, EventArgs e)
@@ -96,6 +122,7 @@ namespace Monopoly
             Player = new Player();
 
             Player.CreatePlayer(txtFirstName.Text, txtLastName.Text);
+            Player.AddMoney(1000000000);
 
             myListOfPlayers.Add(Player);
 
@@ -106,60 +133,74 @@ namespace Monopoly
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            LoadTileNames();
+            LoadTileNames(); //call the function which loads Tile Names
 
-            for (int i = 1; i < 21; i++)
+            for (int i = 0; i < 22; i++)
             {
-                myTile = new Tile();
-                myTile.setID(i);
-                myListOfTiles.Add(myTile);
+                myTile = new Tile();//Create a new Tile
+                myTile.setID(i);//Set the Tile ID to te Current i
+                myListOfTiles.Add(myTile);//Add the newly created Tile to the list of tiles
             }
 
             myCurrentTile = myTile;
 
-            AddTilesToListOfTileControls();
+            AddTilesToListOfTileControls();//Add all the black Labels as tiles to the list of Tile controls
 
-            int myNo = 0;
+            int myNo = 0; //Var told haold purchase value for the Cards/Tiles
 
             for (int i = 0; i < TileControls.Count; i++)
             {
-                TileControls[i].Text = $"{i}";
-                myNo = myRandom.Next(100000, 200000000);
-                CreateNameLabels(i,listOfTileNames[i]);
-                CreateValueLabels(i,(int)RoundToNearest(myNo));
+                TileControls[i].Text = $"{i}";//Give a text label to each Tile/Label for clarity
+                myNo = myRandom.Next(100000, 200000000); //Get a value between 100,000 and 200,000,000 to assign as purchase value
+                CreateNameLabels(i, listOfTileNames[i]); //Call the function of createing a label at runtime and assiging it a name from the names in the ListofTileNames
+
+                CreateValueLabels(i, (int)RoundToNearest(myNo)); //Create the virtual label to set the purchase value of the tile and rounding off the myNo var
             }
 
             for (int i = 0; i < myListOfTiles.Count; i++)
             {
-                myListOfTiles[i].SetName(listOfTileNames[i + 1]);
-                myListOfTiles[i].SetPurchaseValue((int)Convert.ToDouble(listOfValueLabels[i + 1].Text.ToString()));
+                myListOfTiles[i].SetName(listOfTileNames[i]); //Assign a name to the Tile Name property form the listoftileNames;
+                myListOfTiles[i].SetPurchaseValue((int)Convert.ToDouble(listOfValueLabels[i].Text.ToString())); //Assign purchase value to the tile purchase property
+            }
+
+            foreach (Tile tiles in myListOfTiles)
+            {
+                if ((tiles.Name != "Community Chest") && (tiles.Name != "Chance"))
+                {
+                    tiles.SetIsPurchaseable();
+                }
             }
         }
 
         
         private void BtnPurchase_Click(object sender, EventArgs e)
         {
-            PurchaseTile();
-            AddToListBoxOfAlltilesPurchased();
+            PurchaseTile(); //Call the Purchase method
+            AddToListBoxOfAlltilesPurchased(); //Add the purchased tile to the litbox to hold all purchased tiles
         }
 
         private void ListBoxPlayers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void listBoxPlayers_Click(object sender, EventArgs e)
         {
             foreach (Player players in myListOfPlayers)
             {
                 if (players.FirstName + " " + players.LastName == listBoxPlayers.Text)
                 {
-                    CurrentPlayer = players;
+                    CurrentPlayer = players; //set the current player to the selected player in the listbox
+                    lblMoney.Text = CurrentPlayer.Money.ToString();
                 }
             }
 
-            AddToListBoxOfTilesOwned();
+            AddToListBoxOfTilesOwned(); //Calls the mthod which checks all the Tiles the current player holds
 
             btnDice.Enabled = true;
             btnPurchase.Enabled = true;
         }
 
-
         //*********************************************CUSTOM FUNCTIONS*************************************************
         //*********************************************CUSTOM FUNCTIONS*************************************************
         //*********************************************CUSTOM FUNCTIONS*************************************************
@@ -168,7 +209,7 @@ namespace Monopoly
         //*********************************************CUSTOM FUNCTIONS*************************************************
         //*********************************************CUSTOM FUNCTIONS*************************************************
 
-
+        #region My Custom Functions
         double RoundToNearest(int value)
         {
             if (value >= 100000 && value <= 999999)
@@ -188,7 +229,7 @@ namespace Monopoly
                 return Math.Round((double)value / 100000000, 0) * 100000000;
             }
         }
-        void LoadTileNames()
+        void LoadTileNames() //initial names given to all tiles on load
         {
             listOfTileNames.Add("Serengeti");
             listOfTileNames.Add("Harrys");
@@ -215,47 +256,47 @@ namespace Monopoly
         }
         void CreateNameLabels(int i,string tName)
         {
-            nameLabel = new Label();
+            nameLabel = new Label(); //Create a new Title Virtual Label everytime this method is called
 
-            nameLabel.Name = "TileLabel" + i;
-            nameLabel.Top = TileControls[i].Top;
-            nameLabel.Width = TileControls[i].Width;
-            nameLabel.Left = TileControls[i].Left;
-            nameLabel.Height = 20;
-            nameLabel.BackColor = Color.Yellow;
-            nameLabel.Text = tName;
-            nameLabel.Visible = true;
-            nameLabel.AutoSize = false;
+            nameLabel.Name = "TileLabel" + i; //set the Name of the virtual label
+            nameLabel.Top = TileControls[i].Top; //Set the top postion of the virtual label same as the Top postion of that tile
+            nameLabel.Width = TileControls[i].Width; //Set the width of the virtual label to the same width as the Tile
+            nameLabel.Left = TileControls[i].Left; // set the left property position of the virtual label same as the Tile
+            nameLabel.Height = 20; //Give the Virtual label a height of 20
+            nameLabel.BackColor = Color.Yellow; // Give the virtual lable a yellow color
+            nameLabel.Text = tName; //Set the text property of the virtual label
+            nameLabel.Visible = true; //Make it visible
+            nameLabel.AutoSize = false; //Set the autosize propert of the lable to false.
 
-            this.Controls.Add(nameLabel);
+            this.Controls.Add(nameLabel); //Add the visrtual label to the list of controls of the form
 
-            nameLabel.BringToFront();
+            nameLabel.BringToFront(); // Brings the virtaul label to the top most.
 
-            listOfNameLabels.Add(nameLabel);
+            listOfNameLabels.Add(nameLabel); //Add the virtual label to the listofNameLabels
         }
 
         void CreateValueLabels(int i, int value)
         {
-            valueLabel = new Label();
+            valueLabel = new Label(); //Create a new virtual label
 
-            valueLabel.Name = "TileLabelValue" + i;
-            valueLabel.Top = TileControls[i].Top + (TileControls[i].Height-20);
-            valueLabel.Width = TileControls[i].Width;
-            valueLabel.Left = TileControls[i].Left;
-            valueLabel.Height = 20;
-            valueLabel.BackColor = Color.Cyan;
-            valueLabel.Text = value.ToString("###,###,###");
+            valueLabel.Name = "TileLabelValue" + i; //Assign the name of the virtual label
+            valueLabel.Top = TileControls[i].Top + (TileControls[i].Height-20); //Set the Top postion of the virtual label 20pxls less from the bottom of the Tile
+            valueLabel.Width = TileControls[i].Width; //Set the Width of the virtual label same as the Tile
+            valueLabel.Left = TileControls[i].Left; // Set the left property of the virtual labe same as that of the tile
+            valueLabel.Height = 20; // Set the height porperty of the visrtual label to 20
+            valueLabel.BackColor = Color.Cyan; // Give a Cyan color to the virtual label
+            valueLabel.Text = value.ToString("###,###,###"); //Format the vistual label to give it commas to display the amounts properly
             valueLabel.Visible = true;
             valueLabel.AutoSize = false;
 
-            this.Controls.Add(valueLabel);
+            this.Controls.Add(valueLabel); // Add the virtual label to the list of controls in the form
 
-            valueLabel.BringToFront();
+            valueLabel.BringToFront(); // Bring the virtual label to the top of other controls
 
-            listOfValueLabels.Add(valueLabel);
+            listOfValueLabels.Add(valueLabel); // add the virtual label to the listofValueLabels
         }
 
-        void AddTilesToListOfTileControls()
+        void AddTilesToListOfTileControls() //Add all black/tiel/card labels as tiles to the Tilecontrolslist
         {
             TileControls.Add(Tile0);
             TileControls.Add(Tile1);
@@ -292,24 +333,27 @@ namespace Monopoly
 
         public void PurchaseTile()
         {
-            
+            if (myCurrentTile.IsPurchaseAble)
+            {
                 if (myCurrentTile.Purchased == false)
                 {
-                    myCurrentTile.SetTilePurchased();
-                    myCurrentTile.SetOwner(CurrentPlayer);
-                    CurrentPlayer.TilesOwned.Add(myCurrentTile);
+                    myCurrentTile.SetTilePurchased(); //Sets the purchased porpert of the tile to True
+                    myCurrentTile.SetOwner(CurrentPlayer); //Sets the player who owns that property
+                    CurrentPlayer.TilesOwned.Add(myCurrentTile); //Add the tile to the listoftiles in the currentplayer
+                    CurrentPlayer.SubtractMoney((int)Convert.ToDouble(listOfValueLabels[myCurrentTile.ID].Text));
                     MessageBox.Show($"{listOfNameLabels[myCurrentTile.ID].Text} Purchased by {CurrentPlayer.FirstName} {CurrentPlayer.LastName} for {listOfValueLabels[myCurrentTile.ID].Text}");
-            }
+                }
                 else
                 {
                     MessageBox.Show("Tile Already Purchased");
                 }
+            }
 
-            AddToListBoxOfTilesOwned();
+            AddToListBoxOfTilesOwned(); //Checks all the tiles owned by the current player.
             
         }
 
-        void AddToListBoxOfAlltilesPurchased()
+        void AddToListBoxOfAlltilesPurchased() //Add All tiles purchased to the ListBox
         {
             listBoxTilesPurchased.Items.Clear();
 
@@ -324,7 +368,7 @@ namespace Monopoly
             }
         }
 
-        void AddToListBoxOfTilesOwned()
+        void AddToListBoxOfTilesOwned() //Refresh the tiles owned by the current player
         {
 
             listBoxTilesOwned.Items.Clear();
@@ -333,16 +377,20 @@ namespace Monopoly
             {
                 foreach (Tile tiles in CurrentPlayer.TilesOwned)
                 {
-                    listBoxTilesOwned.Items.Add(tiles.Name);
+                    listBoxTilesOwned.Items.Add($"{tiles.Name}");
                 }
             }
             catch
             {
-             
+                MessageBox.Show("Error");
             }
-            
+
+            lblMoney.Text = CurrentPlayer.Money.ToString();
         }
 
+
+        #endregion
+
         //*********************************************CUSTOM FUNCTIONS*************************************************
         //*********************************************CUSTOM FUNCTIONS*************************************************
         //*********************************************CUSTOM FUNCTIONS*************************************************
@@ -351,6 +399,6 @@ namespace Monopoly
         //*********************************************CUSTOM FUNCTIONS*************************************************
         //*********************************************CUSTOM FUNCTIONS*************************************************
 
-       
+
     }
 }

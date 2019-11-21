@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Monopoly
 {
-    public partial class frmBoard : Form
+    public partial class frmBoard : Form1
     {
         public frmBoard()
         {

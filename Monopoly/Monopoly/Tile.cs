@@ -52,6 +52,13 @@ namespace Monopoly
         {
             get { return purchased; }
         }
+
+        bool ispurchaseable = false;
+        public bool IsPurchaseAble
+        {
+            get { return ispurchaseable; }
+        }
+
         //***********************END PROPERTIES**********************
         #endregion
 
@@ -87,6 +94,12 @@ namespace Monopoly
         {
             purchasevalue = value;
         }
+
+        public void SetIsPurchaseable()
+        {
+            ispurchaseable = true;
+        }
+
         //***********************END FUNCTIONS**********************
         #endregion
     }
