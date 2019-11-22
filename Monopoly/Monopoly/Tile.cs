@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Monopoly
 {
-    class Tile
+    public class Tile
     {
         #region Tile Properties
         //***********************BEGIN PROPERTIES**********************

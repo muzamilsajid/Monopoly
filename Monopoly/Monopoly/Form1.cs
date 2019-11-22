@@ -14,22 +14,22 @@ namespace Monopoly
     {
         #region Declarations
         //Declare myTile Variable to Hold a Card
-        Tile myTile;
+        public Tile myTile;
         
         // myCurrentTile Holds The Currently Active Tile
-        Tile myCurrentTile;
+        public Tile myCurrentTile;
         
         //CurrentPlayer holds the currently active player.
-        Player CurrentPlayer;
+        public Player CurrentPlayer;
         
         //List for holding all the tiles (Cards)
-        List<Tile> myListOfTiles = new List<Tile>();
+        public List<Tile> myListOfTiles = new List<Tile>();
 
         //List for holding All the players
-        List<Player> myListOfPlayers = new List<Player>();
+        public List<Player> myListOfPlayers = new List<Player>();
 
 
-        int myCurrentPosition = 0;
+        public int myCurrentPosition = 0;
 
         //List for adding all Lables(Tiles/Cards) on Load
         List<Control> TileControls = new List<Control>();
@@ -45,6 +45,8 @@ namespace Monopoly
 
         Label nameLabel;
         Label valueLabel;
+
+        Triggers trigger;
 
         Player Player;
 
@@ -63,58 +65,42 @@ namespace Monopoly
             btnDice.Text = new Random().Next(1, 7).ToString();//Create A new random value for Dice.
 
 
-            if (myCurrentPosition + Convert.ToInt32(btnDice.Text) < 22)//Check if the Current position is < the total number of tiles on the board so we go back to the first tile.
+            if (CurrentPlayer.Position + Convert.ToInt32(btnDice.Text) < 22)//Check if the Current position is < the total number of tiles on the board so we go back to the first tile.
             {
-                myCurrentPosition = myCurrentPosition + Convert.ToInt32(btnDice.Text);//myCurrentPostion increments by the number on the dice.
-                foreach (Tile myTiles in myListOfTiles)//iterate through all the tiles in myListOfTiles
+                CurrentPlayer.SetPosition(CurrentPlayer.Position + Convert.ToInt32(btnDice.Text));//myCurrentPostion increments by the number on the dice.
+                foreach (Tile myTile in myListOfTiles)//iterate through all the tiles in myListOfTiles
                 {
-                    if (myCurrentPosition == myTiles.ID)//if the myCurrentPostion matches the TILE ID we set the position of the current tile to that Tile
+                    if (CurrentPlayer.Position == myTile.ID)//if the myCurrentPostion matches the TILE ID we set the position of the current tile to that Tile
                     {
-                        myCurrentTile = myTiles;//Set the position of the current tile to the position tile.
+                        CurrentPlayer.CurrentTile = myTile;
+                        myCurrentTile = myTile;//Set the position of the current tile to the position tile.
+                        CurrentPlayer.SetPosition(myCurrentTile.ID);
                     }
                 }
                 //myCurrentTile.setID(myCurrentPosition);//Set the currentTile id to the current position
-                label1.Text = myCurrentPosition.ToString();//Label1 to 21 represnt the balck tiles on the board.
-                label8.Text = "Pos " + myCurrentPosition.ToString();
+                label1.Text = CurrentPlayer.Position.ToString();//Label1 to 21 represnt the balck tiles on the board.
+                label8.Text = "Pos " + CurrentPlayer.Position.ToString();
                 label9.Text = "ID " + myCurrentTile.ID.ToString();
             }
             else //if myCurretnPosition >= 22 then set the current position to the lower numbers
             {
-                myCurrentPosition = myCurrentPosition - ((23 - Convert.ToInt16(btnDice.Text)) - 1);
-                foreach (Tile myTiles in myListOfTiles)
+                CurrentPlayer.SetPosition(CurrentPlayer.Position - ((23 - Convert.ToInt16(btnDice.Text)) - 1));
+                foreach (Tile myTile in myListOfTiles)
                 {
-                    if (myCurrentPosition == myTiles.ID)
+                    if (CurrentPlayer.Position == myTile.ID)
                     {
-                        myCurrentTile = myTiles;
+                        CurrentPlayer.CurrentTile = myTile;
+                        myCurrentTile = myTile;
+                        CurrentPlayer.SetPosition(myCurrentTile.ID);
                     }
                 }
                 //myCurrentTile.setID(myCurrentPosition);
-                label1.Text = myCurrentPosition.ToString();
-                label8.Text = "Pos " + myCurrentPosition.ToString();
+                label1.Text = CurrentPlayer.Position.ToString();
+                label8.Text = "Pos " + CurrentPlayer.Position.ToString();
                 label9.Text = "ID " + myCurrentTile.ID.ToString();
             }
-
-            //Change Color Of Each Tile Based On Current Tile Posistion
-            foreach (Control myTiles in TileControls)
-            {
-                if(myTiles.Text == $"{myCurrentTile.ID}")
-                {
-                    myTiles.BackColor = Color.Red;
-
-                    //Set Position of Player Based on Tile Position
-                    btnPlayer.Left = myTiles.Left;
-                    btnPlayer.Top = myTiles.Top;
-                }
-                else
-                {
-                    myTiles.BackColor = Color.Black;
-                }
-            }
-
-            if(myCurrentTile.Name =="Community Chest")
-            {
-                MessageBox.Show("Landed On Community Chest");
-            }
+            CheckIfLandedOnCommunityChest();
+            DrawTileColors();
         }
 
         private void btnCreatePlayer_Click(object sender, EventArgs e)
@@ -123,6 +109,7 @@ namespace Monopoly
 
             Player.CreatePlayer(txtFirstName.Text, txtLastName.Text);
             Player.AddMoney(1000000000);
+            Player.SetColor(Convert.ToInt32(txtColorR.Text), Convert.ToInt32(txtColorG.Text), Convert.ToInt32(txtColorB.Text));
 
             myListOfPlayers.Add(Player);
 
@@ -133,13 +120,18 @@ namespace Monopoly
 
         private void Form1_Load(object sender, EventArgs e)
         {
+
+            trigger = new Triggers();
             LoadTileNames(); //call the function which loads Tile Names
+
 
             for (int i = 0; i < 22; i++)
             {
                 myTile = new Tile();//Create a new Tile
                 myTile.setID(i);//Set the Tile ID to te Current i
                 myListOfTiles.Add(myTile);//Add the newly created Tile to the list of tiles
+                trigger.myTriggerList.Add(myTile);
+                //trigger.myListOfTiles.Add(myTile);
             }
 
             myCurrentTile = myTile;
@@ -153,14 +145,23 @@ namespace Monopoly
                 TileControls[i].Text = $"{i}";//Give a text label to each Tile/Label for clarity
                 myNo = myRandom.Next(100000, 200000000); //Get a value between 100,000 and 200,000,000 to assign as purchase value
                 CreateNameLabels(i, listOfTileNames[i]); //Call the function of createing a label at runtime and assiging it a name from the names in the ListofTileNames
-
-                CreateValueLabels(i, (int)RoundToNearest(myNo)); //Create the virtual label to set the purchase value of the tile and rounding off the myNo var
+                if ((listOfTileNames[i] != "Community Chest") && (listOfTileNames[i] != "Chance"))
+                {
+                    CreateValueLabels(i, (int)RoundToNearest(myNo)); //Create the virtual label to set the purchase value of the tile and rounding off the myNo var
+                }
+                else
+                {
+                    CreateValueLabels(i, 0);
+                }
             }
 
             for (int i = 0; i < myListOfTiles.Count; i++)
             {
                 myListOfTiles[i].SetName(listOfTileNames[i]); //Assign a name to the Tile Name property form the listoftileNames;
-                myListOfTiles[i].SetPurchaseValue((int)Convert.ToDouble(listOfValueLabels[i].Text.ToString())); //Assign purchase value to the tile purchase property
+                if ((listOfTileNames[i] != "Community Chest") && (listOfTileNames[i] != "Chance"))
+                {
+                    myListOfTiles[i].SetPurchaseValue((int)Convert.ToDouble(listOfValueLabels[i].Text.ToString())); //Assign purchase value to the tile purchase property
+                }
             }
 
             foreach (Tile tiles in myListOfTiles)
@@ -192,8 +193,11 @@ namespace Monopoly
                 {
                     CurrentPlayer = players; //set the current player to the selected player in the listbox
                     lblMoney.Text = CurrentPlayer.Money.ToString();
+                    label1.Text = CurrentPlayer.CurrentPosition.ToString();
                 }
             }
+
+            DrawTileColors();
 
             AddToListBoxOfTilesOwned(); //Calls the mthod which checks all the Tiles the current player holds
 
@@ -210,6 +214,29 @@ namespace Monopoly
         //*********************************************CUSTOM FUNCTIONS*************************************************
 
         #region My Custom Functions
+
+        void DrawTileColors()
+        {
+            //Change Color Of Each Tile Based On Current Tile Posistion
+            foreach (Control myTile in TileControls)
+            {
+                if (myTile.Text == $"{CurrentPlayer.Position}")
+                {
+                    myTile.BackColor = CurrentPlayer.myChosenColor;
+                    //myTile.BackColor = Color.Red;
+
+                    //Set Position of Player Based on Tile Position
+                    btnPlayer.Left = myTile.Left;
+                    btnPlayer.Top = myTile.Top;
+                }
+                else
+                {
+                    //myTile.BackColor = CurrentPlayer.myChosenColor;
+                    myTile.BackColor = Color.Black;
+                }
+            }
+        }
+
         double RoundToNearest(int value)
         {
             if (value >= 100000 && value <= 999999)
@@ -342,6 +369,7 @@ namespace Monopoly
                     CurrentPlayer.TilesOwned.Add(myCurrentTile); //Add the tile to the listoftiles in the currentplayer
                     CurrentPlayer.SubtractMoney((int)Convert.ToDouble(listOfValueLabels[myCurrentTile.ID].Text));
                     MessageBox.Show($"{listOfNameLabels[myCurrentTile.ID].Text} Purchased by {CurrentPlayer.FirstName} {CurrentPlayer.LastName} for {listOfValueLabels[myCurrentTile.ID].Text}");
+                    listOfNameLabels[CurrentPlayer.CurrentPosition].BackColor = CurrentPlayer.myChosenColor;
                 }
                 else
                 {
@@ -361,9 +389,9 @@ namespace Monopoly
             {
                 if (tilesinlist.Purchased)
                 {
-                    listBoxTilesPurchased.Items.Add($"{tilesinlist.Owner.FirstName} {tilesinlist.Owner.LastName}");
-                    listBoxTilesPurchased.Items.Add(tilesinlist.Name);
-                    listBoxTilesPurchased.Items.Add($"Value: {tilesinlist.PurchaseValue.ToString("###,###,###")}");
+                    listBoxTilesPurchased.Items.Add($"{tilesinlist.Owner.FirstName} {tilesinlist.Owner.LastName} Purchased {tilesinlist.Name} For {tilesinlist.PurchaseValue.ToString("###,###,###")}");
+                    //listBoxTilesPurchased.Items.Add(tilesinlist.Name);
+                    //listBoxTilesPurchased.Items.Add($"Value: {tilesinlist.PurchaseValue.ToString("###,###,###")}");
                 }
             }
         }
@@ -388,6 +416,17 @@ namespace Monopoly
             lblMoney.Text = CurrentPlayer.Money.ToString();
         }
 
+        void CheckIfLandedOnCommunityChest()
+        {
+            trigger.Randomize();
+
+            if (CurrentPlayer.CurrentTile.Name == "Community Chest")
+            {
+                trigger.MoveToTile(CurrentPlayer,myCurrentTile);
+                MessageBox.Show($"Jummped to {myCurrentTile.ID}");
+            }
+            //DrawTileColors();
+        }
 
         #endregion
 
@@ -400,5 +439,20 @@ namespace Monopoly
         //*********************************************CUSTOM FUNCTIONS*************************************************
 
 
+        void GivePlayerCashFromBank(Player player, int value)
+        {
+            player.AddMoney(value);
+        }
+
+        void GivePlayerCashFromAnotherPlayer(Player giveToPlayer, Player fromPlayer, int value)
+        {
+            giveToPlayer.AddMoney(value);
+            fromPlayer.SubtractMoney(value);
+        }
+
+        private void Button1_Click(object sender, EventArgs e)
+        {
+            CheckIfLandedOnCommunityChest();
+        }
     }
 }

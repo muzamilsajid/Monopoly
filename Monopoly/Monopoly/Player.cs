@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace Monopoly
 {
-    class Player
+    public class Player
     {
 
         string firstname;
@@ -33,8 +34,25 @@ namespace Monopoly
             get { return turn; }
         }
 
+        int position;
+
+        public int Position
+        {
+            get { return position; }
+        }
+
+        public int CurrentPosition;
+
+        public Tile CurrentTile;
+
+        Color mychosencolor;
+        public Color myChosenColor
+        {
+            get { return mychosencolor; }
+        }
 
         public List<Tile> TilesOwned = new List<Tile>();
+
 
         public void CreatePlayer(string fName, string lName)
         {
@@ -50,6 +68,16 @@ namespace Monopoly
         public void SubtractMoney(int value)
         {
             money -= value;
+        }
+
+        public void SetPosition(int pos)
+        {
+            position = pos;
+        }
+
+        public void SetColor(int R,int G,int B)
+        {
+            mychosencolor = Color.FromArgb(R, G, B);
         }
     }
 }
